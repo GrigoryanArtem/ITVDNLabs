@@ -22,5 +22,23 @@ namespace LAB3_PART3_InputOutput.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("7")]
+        public int GridHeight {
+            get {
+                return ((int)(this["GridHeight"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("17")]
+        public int GridWidth {
+            get {
+                return ((int)(this["GridWidth"]));
+            }
+        }
     }
 }

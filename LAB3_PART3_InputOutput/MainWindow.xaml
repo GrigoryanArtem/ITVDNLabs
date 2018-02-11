@@ -10,7 +10,7 @@
         Height="150" Width="300" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Icon="main.ico">
+        Icon="main.ico" KeyDown="OnKeyDown" MouseDoubleClick="OnMouseDoubleClick" KeyUp="OnKeyUp" Deactivated="OnDeactivated">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,7 +25,7 @@
             x:Name="ctrlColorLabel"
             Grid.Row="0"
             Style="{DynamicResource SelectableTextBlock}"
-            Text="{Binding ElementName=ctrlColorPicker, Path=SelectedColorText}" />
+            PreviewMouseRightButtonDown="OnRightButtonMouseDown" />
 
         <xceed:ColorPicker
             Grid.Row="1"
@@ -33,7 +33,16 @@
             ShowTabHeaders="False"
             ShowStandardColors="False"
             ShowAvailableColors="False"
+            BorderThickness="0 1 0 0"
             ColorMode="ColorCanvas"            
-            SelectedColorChanged="SelectedColorChanged" />
+            SelectedColorChanged="OnSelectedColorChanged" />
+
+        <Canvas
+            RenderOptions.EdgeMode="Aliased"
+            RenderOptions.BitmapScalingMode="Fant"
+            Visibility="Hidden"
+            x:Name="ctrlCanvas"
+            
+            Grid.Row="0"/>
     </Grid>
 </Window>

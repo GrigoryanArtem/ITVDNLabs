@@ -1,21 +1,30 @@
-﻿using System.Windows;
+﻿using LAB3_PART3_InputOutput.Model;
+using System.Timers;
+using System.Windows;
+using System.Windows.Input;
 using System.Windows.Media;
 
 namespace LAB3_PART3_InputOutput
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        Timer timer = new Timer(Constants.TimerInterval);
+
         public MainWindow()
         {
             InitializeComponent();
+            timer.Elapsed += OnTick;
         }
 
-        private void SelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<System.Windows.Media.Color?> e)
+        private void OnTick(object sender, ElapsedEventArgs e)
+        {
+            DrawScreenCapture();
+        }
+
+        private void OnSelectedColorChanged(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
             ctrlColorLabel.Foreground = new SolidColorBrush(CalculateForegroundColor(e.NewValue));
+            ctrlColorLabel.Text = Model.ColorConverter.ConvertToHex(e.NewValue.Value);
         }
 
         private Color CalculateForegroundColor(Color? backgoundColor)
@@ -25,6 +34,51 @@ namespace LAB3_PART3_InputOutput
 
             Color color = backgoundColor.Value;
             return (color.R + color.G + color.B) >= 350 || color.A <= 70 ? Colors.Black : Colors.White;
+        }
+
+        private void OnKeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftShift)
+            {
+                ctrlCanvas.Visibility = Visibility.Hidden;
+                timer.Stop();
+            }
+        }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.LeftShift && !timer.Enabled)
+            {
+                ctrlCanvas.Visibility = Visibility.Visible;
+                timer.Start();
+            }
+
+            if (e.Key == Key.C && e.KeyboardDevice.Modifiers == ModifierKeys.Shift)
+                ctrlColorPicker.SelectedColor = ScreenColorPicker.GetColorFromCursorPosition();
+        }
+
+        private void DrawScreenCapture()
+        {
+            var screenCapture = ScreenColorPicker.GetBitmapFromCursorPosition(
+                Properties.Settings.Default.GridWidth, Properties.Settings.Default.GridHeight);
+            Dispatcher.Invoke(() => ctrlCanvas.DrawScreenCapture(screenCapture));
+        }
+
+        private void OnRightButtonMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if(e.RightButton == MouseButtonState.Pressed)
+                Clipboard.SetText(ctrlColorPicker.SelectedColorText);
+        }
+
+        private void OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Topmost = !Topmost;
+        }
+
+        private void OnDeactivated(object sender, System.EventArgs e)
+        {
+            if (Topmost)
+                Activate();
         }
     }
 }
