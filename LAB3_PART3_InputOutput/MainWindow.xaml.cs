@@ -33,7 +33,8 @@ namespace LAB3_PART3_InputOutput
                 return Colors.Black;
 
             Color color = backgoundColor.Value;
-            return (color.R + color.G + color.B) >= 350 || color.A <= 70 ? Colors.Black : Colors.White;
+            return (color.R + color.G + color.B) >= Constants.RGBThreshold || 
+                color.A <= Constants.AlphaThreshold ? Colors.Black : Colors.White;
         }
 
         private void OnKeyUp(object sender, KeyEventArgs e)
@@ -79,6 +80,19 @@ namespace LAB3_PART3_InputOutput
         {
             if (Topmost)
                 Activate();
+        }
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Topmost = Properties.Settings.Default.Topmost;
+            ctrlColorPicker.SelectedColor = Properties.Settings.Default.Color;
+        }
+
+        private void OnClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Topmost = Topmost;
+            Properties.Settings.Default.Color = ctrlColorPicker.SelectedColor ?? Colors.White;
+            Properties.Settings.Default.Save();
         }
     }
 }

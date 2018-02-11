@@ -10,7 +10,7 @@
         Height="150" Width="300" 
         ResizeMode="NoResize" 
         WindowStartupLocation="CenterScreen"
-        Icon="main.ico" KeyDown="OnKeyDown" MouseDoubleClick="OnMouseDoubleClick" KeyUp="OnKeyUp" Deactivated="OnDeactivated">
+        Icon="main.ico" KeyDown="OnKeyDown" MouseDoubleClick="OnMouseDoubleClick" KeyUp="OnKeyUp" Deactivated="OnDeactivated" Closing="OnClosing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -25,7 +25,7 @@
             x:Name="ctrlColorLabel"
             Grid.Row="0"
             Style="{DynamicResource SelectableTextBlock}"
-            PreviewMouseRightButtonDown="OnRightButtonMouseDown" />
+            PreviewMouseRightButtonDown="OnRightButtonMouseDown" Loaded="OnLoaded" />
 
         <xceed:ColorPicker
             Grid.Row="1"
